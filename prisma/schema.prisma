@@ -1,0 +1,46 @@
+generator gen {
+  provider = "prisma-client-js"
+}
+
+generator trpc {
+  provider = "prisma-trpc-generator"
+  withZod = true
+  withMiddleware = false
+  withShield = false
+  output="../src/server/prisma"
+  contextPath = "../src/server/context"
+  showModelNameInProceduere = false
+  generateModelActions = "aggregate,count,create,delete,findMany,findUnique"
+}
+
+datasource db {
+    provider = "postgresql"
+     url = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  username String
+  password String
+  role Role @default(USER)
+  receipts Receipt[]
+}
+
+model Receipt {
+  id Int @id @default(autoincrement())
+  title String
+  filename String
+  status Status @default(OPEN)
+  user User? @relation(fields: [userId], references: [id])
+  userId Int? @unique
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  OPEN
+  CLOSED
+}
