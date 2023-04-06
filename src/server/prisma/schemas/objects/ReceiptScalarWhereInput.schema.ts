@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {IntFilterObjectSchema} from './IntFilter.schema';
 import {StringFilterObjectSchema} from './StringFilter.schema';
+import {FloatFilterObjectSchema} from './FloatFilter.schema';
 import {EnumStatusFilterObjectSchema} from './EnumStatusFilter.schema';
 import {StatusSchema} from '../enums/Status.schema';
 import {IntNullableFilterObjectSchema} from './IntNullableFilter.schema';
@@ -29,8 +30,11 @@ const Schema: z.ZodType<Prisma.ReceiptScalarWhereInput> = z
     title: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
-    filename: z
+    description: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
+    amount: z
+      .union([z.lazy(() => FloatFilterObjectSchema), z.number()])
       .optional(),
     status: z
       .union([

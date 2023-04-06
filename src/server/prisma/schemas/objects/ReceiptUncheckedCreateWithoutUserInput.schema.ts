@@ -7,7 +7,8 @@ const Schema: z.ZodType<Prisma.ReceiptUncheckedCreateWithoutUserInput> = z
   .object({
     id: z.number().optional(),
     title: z.string(),
-    filename: z.string(),
+    description: z.string(),
+    amount: z.number(),
     status: z.lazy(() => StatusSchema).optional(),
   })
   .strict();

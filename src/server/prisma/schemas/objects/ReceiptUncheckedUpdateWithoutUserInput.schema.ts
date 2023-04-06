@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {IntFieldUpdateOperationsInputObjectSchema} from './IntFieldUpdateOperationsInput.schema';
 import {StringFieldUpdateOperationsInputObjectSchema} from './StringFieldUpdateOperationsInput.schema';
+import {FloatFieldUpdateOperationsInputObjectSchema} from './FloatFieldUpdateOperationsInput.schema';
 import {StatusSchema} from '../enums/Status.schema';
 import {EnumStatusFieldUpdateOperationsInputObjectSchema} from './EnumStatusFieldUpdateOperationsInput.schema';
 
@@ -20,10 +21,16 @@ const Schema: z.ZodType<Prisma.ReceiptUncheckedUpdateWithoutUserInput> = z
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
-    filename: z
+    description: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
+    amount: z
+      .union([
+        z.number(),
+        z.lazy(() => FloatFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
     status: z

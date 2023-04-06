@@ -3,7 +3,8 @@ import {z} from 'zod';
 export const ReceiptScalarFieldEnumSchema = z.enum([
   'id',
   'title',
-  'filename',
+  'description',
+  'amount',
   'status',
   'userId',
 ]);

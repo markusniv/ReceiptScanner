@@ -96,7 +96,10 @@ export default class AuthController {
         status: 'success',
       };
     } catch (error: any) {
-      throw new trpc.TRPCError(error);
+      return {
+        code: ERROR,
+        message: 'Username or password wrong!',
+      };
     }
   }
 }

@@ -6,7 +6,8 @@ const Schema: z.ZodType<Prisma.ReceiptMinAggregateInputType> = z
   .object({
     id: z.literal(true).optional(),
     title: z.literal(true).optional(),
-    filename: z.literal(true).optional(),
+    description: z.literal(true).optional(),
+    amount: z.literal(true).optional(),
     status: z.literal(true).optional(),
     userId: z.literal(true).optional(),
   })

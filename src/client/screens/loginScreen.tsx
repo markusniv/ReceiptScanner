@@ -3,12 +3,16 @@ import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {trpc} from '../trpc';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {ERROR, USER_SESSION} from '../../utils/constants';
-import {sessionData} from '../../utils/types';
 import {SessionState} from '../../utils/enums';
 import {LoginScreenProps} from '../navigation/types';
 import {retrieveUserSession} from '../helperFunctions/helperfunctions';
+import {Role} from '@prisma/client';
 
 const styles = StyleSheet.create({
+  titleText: {
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
   input: {
     height: 40,
     margin: 12,
@@ -19,6 +23,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
     width: '100%',
+    paddingVertical: 20,
   },
 });
 const LoginScreen = ({navigation}: LoginScreenProps) => {
@@ -36,6 +41,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   useEffect(() => {
     retrieveUserSession().then(result => {
       if (result !== undefined) {
+        if (bearerToken === '') {
+          setBearerToken(result);
+        }
         authentication.mutate({id: result.id, accessToken: result.accessToken});
       }
     });
@@ -44,7 +52,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   useEffect(() => {
     switch (authentication.data?.sessionState) {
       case SessionState.SUCCESS:
-        navigation.navigate('Receipts');
+        const {accessToken, id, username, role} = bearerToken;
+        navigation.navigate('Receipts', {id, username, role, accessToken});
         break;
       case SessionState.FAILED:
         setError('Authentication failed, please try logging in again.');
@@ -63,16 +72,18 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     const id = data?.user?.id;
     const role = data?.user?.role;
 
+    const tokenObject = {
+      accessToken,
+      username,
+      role,
+      id,
+    };
+
     async function setToken() {
       try {
         await EncryptedStorage.setItem(
           USER_SESSION,
-          JSON.stringify({
-            accessToken,
-            username,
-            role,
-            id,
-          }),
+          JSON.stringify(tokenObject),
         );
       } catch (e) {
         setError(e as string);
@@ -81,7 +92,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
     if (accessToken) {
       setToken().then(() => {
-        setBearerToken(accessToken);
+        setBearerToken(tokenObject);
       });
     } else {
       if (data?.code === ERROR) {
@@ -91,17 +102,26 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   }, [registerUser.data, loginUser.data]);
 
   return (
-    <View style={{alignItems: 'center', margin: 20}}>
+    <View
+      style={{
+        alignItems: 'center',
+        margin: 20,
+        justifyContent: 'center',
+        height: '100%',
+      }}>
       <View style={styles.inputContainer}>
-        <Text>Login</Text>
+        <Text style={styles.titleText}>Login</Text>
         <TextInput
           style={styles.input}
           value={loginUsername}
+          placeholder={'Username'}
           onChangeText={setLoginUsername}
         />
         <TextInput
+          secureTextEntry={true}
           style={styles.input}
           value={loginPassword}
+          placeholder={'Password'}
           onChangeText={setLoginPassword}
         />
         <Button
@@ -115,15 +135,18 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text>Register</Text>
+        <Text style={styles.titleText}>Register</Text>
         <TextInput
           style={styles.input}
           value={registerUsername}
+          placeholder={'Username'}
           onChangeText={setRegisterUsername}
         />
         <TextInput
+          secureTextEntry={true}
           style={styles.input}
           value={registerPassword}
+          placeholder={'Password'}
           onChangeText={setRegisterPassword}
         />
         <Button

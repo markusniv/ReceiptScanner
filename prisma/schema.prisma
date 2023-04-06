@@ -29,10 +29,11 @@ model User {
 model Receipt {
   id Int @id @default(autoincrement())
   title String
-  filename String
+  description String
+  amount Float
   status Status @default(OPEN)
   user User? @relation(fields: [userId], references: [id])
-  userId Int? @unique
+  userId Int?
 }
 
 enum Role {

@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {IntWithAggregatesFilterObjectSchema} from './IntWithAggregatesFilter.schema';
 import {StringWithAggregatesFilterObjectSchema} from './StringWithAggregatesFilter.schema';
+import {FloatWithAggregatesFilterObjectSchema} from './FloatWithAggregatesFilter.schema';
 import {EnumStatusWithAggregatesFilterObjectSchema} from './EnumStatusWithAggregatesFilter.schema';
 import {StatusSchema} from '../enums/Status.schema';
 import {IntNullableWithAggregatesFilterObjectSchema} from './IntNullableWithAggregatesFilter.schema';
@@ -31,8 +32,11 @@ const Schema: z.ZodType<Prisma.ReceiptScalarWhereWithAggregatesInput> = z
     title: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
-    filename: z
+    description: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
+      .optional(),
+    amount: z
+      .union([z.lazy(() => FloatWithAggregatesFilterObjectSchema), z.number()])
       .optional(),
     status: z
       .union([

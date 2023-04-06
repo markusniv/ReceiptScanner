@@ -22,7 +22,13 @@ export const authRouter = t.router({
           ACCESS_SECRET_KEY,
         ) as jwt.JwtPayload;
 
-        if (response.id === input.id) {
+        const checkedUser = await ctx.prisma.user.findUnique({
+          where: {
+            id: response.id,
+          },
+        });
+
+        if (checkedUser?.id === input.id) {
           sessionState = SessionState.SUCCESS;
         }
         return {sessionState, token: response};

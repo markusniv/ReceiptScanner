@@ -17,3 +17,13 @@ export async function retrieveUserSession() {
     };
   }
 }
+
+export async function removeUserSession() {
+  try {
+    await EncryptedStorage.clear();
+  } catch (error) {
+    return {
+      message: 'Logout failed.',
+    };
+  }
+}
