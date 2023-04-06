@@ -8,8 +8,8 @@ generator trpc {
   withMiddleware = false
   withShield = false
   output="../src/server/prisma"
-  contextPath = "../src/server/context"
-  showModelNameInProceduere = false
+  contextPath = "../src/server/context/context"
+  showModelNameInProcedure = false
   generateModelActions = "aggregate,count,create,delete,findMany,findUnique"
 }
 
@@ -20,7 +20,7 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
-  username String
+  username String @unique
   password String
   role Role @default(USER)
   receipts Receipt[]

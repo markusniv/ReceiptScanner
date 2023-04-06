@@ -1,4 +1,4 @@
-import {TRPC_API_ENDPOINT} from '../utils/constants';
+import {PORT, TRPC_API_ENDPOINT} from '../utils/constants';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import {appRouter} from './prisma/routers';
 import {createContext} from './context/context';
@@ -13,3 +13,5 @@ app.use(
     createContext,
   }),
 );
+
+app.listen(PORT);
